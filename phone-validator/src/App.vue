@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { defineAsyncComponent } from "vue";
+const PhoneValidator = defineAsyncComponent(() => import("./components/PhoneValidator.vue"));
+const PhoneExample = defineAsyncComponent(() => import("./components/PhoneExample.vue"));
+import './index.css'
+
 </script>
 
 <template>
-  <HelloWorld />
+    <PhoneValidator />
+    <PhoneExample />
 </template>
