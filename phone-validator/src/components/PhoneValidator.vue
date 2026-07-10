@@ -1,5 +1,5 @@
 <template>
-    <div class="phone_form_container">
+    <div class="phone_form_container bg-red-500">
         <label class="label">Phone number</label>
         <div class="input_group">
             <div class="select_container">
@@ -21,19 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
-import type { CountryCode } from "libphonenumber-js";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useStore } from "vuex";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { key, type Country } from "../store";
 
-//Type def for Countries
-interface Country {
-    name: string;
-    code: CountryCode;
-    dialCode: string;
-    flag: string;
-    placeholder: string;
-    errorTranslation: string;
-}
+const store = useStore(key);
 
 const countries: Country[] = [
     {
@@ -69,7 +62,7 @@ const countries: Country[] = [
         errorTranslation: "Ungültige Telefonnummer.",
     },
 ];
-const selectedCountry = ref<Country>(countries[0]);
+const selectedCountry = computed(() => store.state.selectedCountry ?? countries[0]);
 const isOpen = ref(false);
 const phoneNumber = ref("");
 const errorMessage = ref("");
@@ -80,7 +73,7 @@ const openDropdown = () => {
 };
 
 const selectCountry = (country: Country) => {
-    selectedCountry.value = country;
+    store.commit("setSelectedCountry", country);
     isOpen.value = false;
     validatePhone();
 };
@@ -106,6 +99,9 @@ const clickOutside = (event: MouseEvent) => {
 };
 
 onMounted(() => {
+    if (!store.state.selectedCountry) {
+        store.commit("setSelectedCountry", countries[0]);
+    }
     document.addEventListener("click", clickOutside);
 });
 
