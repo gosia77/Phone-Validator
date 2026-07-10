@@ -1,5 +1,5 @@
 <template>
-    <div class="phone_form_container bg-red-500">
+    <div class="phone_form_container">
         <label class="label">Phone number</label>
         <div class="input_group">
             <div class="select_container">
